@@ -1,0 +1,364 @@
+---
+title: "Current Directory"
+description: "Initialize a Zvelte project in your current directory using the dot syntax and learn how conflict resolution works"
+---
+
+## Overview
+
+Zvelte CLI allows you to initialize a project in your current working directory by using `.` (dot) as the project directory argument. This is useful when you've already created a directory and navigated into it, or when you want to merge the template into an existing workspace.
+
+## Basic Usage
+
+Navigate to your desired directory and run:
+
+```bash
+cd my-project
+bunx @queaxtra/zvelte create .
+```
+
+Or with automatic dependency installation:
+
+```bash
+cd my-project
+bunx @queaxtra/zvelte create . --install=bun
+```
+
+## How It Works
+
+When you use `.` as the project directory, Zvelte handles two scenarios differently:
+
+### Empty Directory
+
+If the current directory is empty, Zvelte clones the template directly into it:
+
+<Steps>
+  <Step title="Clone Repository">
+    Clones the template repository into the current directory.
+  </Step>
+  
+  <Step title="Remove Git History">
+    Removes the `.git` directory from the cloned template.
+  </Step>
+  
+  <Step title="Update Configuration">
+    Updates `package.json` with the current directory name.
+  </Step>
+</Steps>
+
+```bash
+$ mkdir my-app && cd my-app
+$ bunx @queaxtra/zvelte create .
+
+Creating new project in /path/to/my-app...
+Cloning into 'my-app'...
+Removed .git directory.
+Project created successfully!
+```
+
+### Non-Empty Directory (Merge Mode)
+
+If the current directory contains files, Zvelte uses a special merge strategy:
+
+<Steps>
+  <Step title="Create Temporary Directory">
+    Creates a temporary directory in your system's temp folder (e.g., `/tmp/zvelte-xxxxx`).
+  </Step>
+  
+  <Step title="Clone to Temp">
+    Clones the template repository into the temporary directory.
+  </Step>
+  
+  <Step title="Check for Conflicts">
+    Compares files in the template with files in your current directory to detect conflicts.
+  </Step>
+  
+  <Step title="Copy or Abort">
+    If no conflicts exist, copies template files into your directory. If conflicts are found, aborts the operation.
+  </Step>
+  
+  <Step title="Clean Up">
+    Removes the temporary directory regardless of success or failure.
+  </Step>
+</Steps>
+
+```bash
+$ cd existing-project
+$ bunx @queaxtra/zvelte create .
+
+Cloning template repository into a temporary directory...
+Copying project files...
+Project successfully initialized in the current directory.
+```
+
+<Info>
+  The merge mode is **only** available when using `.` as the project directory. If you specify a named directory that already exists and is not empty, Zvelte will immediately abort.
+</Info>
+
+## Conflict Detection
+
+Zvelte performs strict conflict detection to prevent accidentally overwriting your existing files.
+
+### What Counts as a Conflict
+
+A conflict occurs when a file or directory from the template has the **same name** as something in your current directory:
+
+```javascript
+// Zvelte's conflict detection logic
+const templateFiles = fs.readdirSync(tempDir);
+const projectFiles = fs.readdirSync(projectPath);
+const conflictingFiles = templateFiles.filter(file => 
+  projectFiles.includes(file)
+);
+```
+
+### Conflict Examples
+
+<CodeGroup>
+
+```bash ✓ No Conflict - Safe to Merge
+Your directory:
+  docs/
+  notes.txt
+  .gitignore
+
+Template files:
+  src/
+  package.json
+  README.md
+  vite.config.js
+
+Result: ✓ Merge succeeds
+```
+
+```bash ✗ Conflict Detected - Aborted
+Your directory:
+  src/
+  package.json
+  README.md
+
+Template files:
+  src/
+  package.json
+  README.md
+  vite.config.js
+
+Result: ✗ Aborted (src, package.json, README.md conflict)
+```
+
+</CodeGroup>
+
+### Conflict Error Message
+
+When conflicts are detected, you'll see:
+
+```bash
+Error: Aborting. Your directory contains files that would conflict 
+with the template: 
+package.json
+src
+README.md
+```
+
+<Warning>
+  Zvelte will **never overwrite** your existing files. If any conflicts are detected, the entire operation is aborted and your directory remains unchanged.
+</Warning>
+
+## Use Cases
+
+<AccordionGroup>
+  <Accordion title="Fresh directory initialization">
+    Create and navigate into a new directory, then initialize:
+    
+    ```bash
+    mkdir my-new-app
+    cd my-new-app
+    bunx @queaxtra/zvelte create . --install=bun
+    ```
+    
+    This is equivalent to:
+    ```bash
+    bunx @queaxtra/zvelte create my-new-app --install=bun
+    cd my-new-app
+    ```
+  </Accordion>
+  
+  <Accordion title="Add Zvelte template to existing workspace">
+    If you have a directory with some documentation or configuration files that don't conflict with the template:
+    
+    ```bash
+    cd my-workspace
+    # Directory contains: docs/, .env.local, notes.txt
+    bunx @queaxtra/zvelte create .
+    # Template files are added alongside existing files
+    ```
+  </Accordion>
+  
+  <Accordion title="Monorepo package setup">
+    Initialize a new package in a monorepo:
+    
+    ```bash
+    cd packages/new-app
+    bunx @queaxtra/zvelte create .
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Safety Features
+
+Zvelte includes several safety mechanisms when using current directory mode:
+
+### Path Validation
+
+The current directory path is validated to prevent security issues:
+
+```javascript
+const resolvedPath = path.resolve(process.cwd(), '.');
+const normalizedPath = path.normalize(resolvedPath);
+
+if (normalizedPath !== resolvedPath) {
+  throw new Error('Path traversal detected in project directory.');
+}
+```
+
+### Temporary Directory Cleanup
+
+The temporary directory used for conflict checking is **always** cleaned up:
+
+```javascript
+try {
+  await handleCurrentDirMerge(projectPath, tempDir);
+} finally {
+  fs.rmSync(tempDir, { recursive: true, force: true });
+}
+```
+
+Even if an error occurs during the merge process, the temp directory is removed.
+
+### Git History Removal
+
+The template's `.git` directory is removed to ensure you can initialize your own repository:
+
+```bash
+Cloning template repository into a temporary directory...
+# .git directory is removed from the temp clone
+Copying project files...
+# Only clean template files are copied
+```
+
+## Comparison: Named vs Current Directory
+
+<CardGroup cols={2}>
+  <Card title="Named Directory" icon="folder-plus">
+    **Command**: `create my-app`
+    
+    - Must not exist or must be empty
+    - Creates the directory if needed
+    - Fails if non-empty
+    - Simpler, more common
+  </Card>
+  
+  <Card title="Current Directory" icon="folder-open">
+    **Command**: `create .`
+    
+    - Works in non-empty directories
+    - Checks for conflicts
+    - Merges template files
+    - More flexible, advanced
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<Tip>
+  **Before merging**: Use `ls -la` to review the contents of your current directory and ensure no files will conflict with the template (like `package.json`, `src/`, `README.md`, etc.).
+</Tip>
+
+<Tip>
+  **After creation**: Review the merged files and adjust any configurations (like `package.json` name) if needed. Zvelte sets the name based on the directory name, which should be correct in most cases.
+</Tip>
+
+<Warning>
+  If you need to merge into a directory that has conflicts, you'll need to:
+  1. Manually rename or move conflicting files
+  2. Run `bunx @queaxtra/zvelte create .` again
+  3. Manually merge any needed content from your backup files
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Error: Directory already exists and is not empty">
+    This error occurs when you use a **named directory** (not `.`) that already exists:
+    
+    ```bash
+    # This fails if my-app exists and is not empty
+    bunx @queaxtra/zvelte create my-app
+    ```
+    
+    **Solution**: Use current directory syntax instead:
+    ```bash
+    cd my-app
+    bunx @queaxtra/zvelte create .
+    ```
+  </Accordion>
+  
+  <Accordion title="Conflict error when merging">
+    Zvelte detected files in your directory that would be overwritten:
+    
+    ```bash
+    Error: Aborting. Your directory contains files that would 
+    conflict with the template: package.json, src
+    ```
+    
+    **Solution**: 
+    1. Back up conflicting files: `mv package.json package.json.backup`
+    2. Run create command again
+    3. Manually merge needed content from backups
+  </Accordion>
+  
+  <Accordion title="Package.json name is incorrect">
+    The package name is automatically set to your directory name:
+    
+    ```json
+    {
+      "name": "current-directory-name",
+      "version": "0.0.1"
+    }
+    ```
+    
+    **Solution**: Manually edit `package.json` after creation if you want a different name.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+After initializing in the current directory:
+
+<Steps>
+  <Step title="Review Generated Files">
+    Check that all template files were copied correctly and no conflicts occurred.
+  </Step>
+  
+  <Step title="Install Dependencies">
+    If you didn't use `--install`, run your package manager:
+    ```bash
+    bun install
+    ```
+  </Step>
+  
+  <Step title="Initialize Git">
+    Set up version control for your new project:
+    ```bash
+    git init
+    git add .
+    git commit -m "Initial commit"
+    ```
+  </Step>
+  
+  <Step title="Start Development">
+    Launch the development server:
+    ```bash
+    bun run dev
+    ```
+  </Step>
+</Steps>

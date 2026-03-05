@@ -1,97 +1,128 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Zvelte"
+description: "Scaffold SvelteKit projects with Shadcn UI, Tailwind CSS, and i18n in seconds"
 ---
 
-## Setting up
+<div className="text-center py-12">
+  <h1 className="text-5xl font-bold mb-4" style={{ color: '#cb0404' }}>
+    Zvelte
+  </h1>
+  <p className="text-xl text-gray-600 mb-8">
+    A CLI tool to quickly scaffold SvelteKit projects with Shadcn UI, Tailwind CSS, and i18n support
+  </p>
+  <div className="flex gap-4 justify-center">
+    <a 
+      href="/quickstart" 
+      className="px-6 py-3 font-semibold rounded-full"
+      style={{ backgroundColor: '#fbbf24', color: '#000000' }}
+    >
+      Get Started
+    </a>
+    <a 
+      href="https://github.com/queaxtra/zvelte" 
+      className="px-6 py-3 font-semibold rounded-full border-2"
+      style={{ borderColor: '#cb0404', color: '#cb0404' }}
+    >
+      View on GitHub
+    </a>
+  </div>
+</div>
 
-Get your documentation site up and running in minutes.
+## Why Zvelte?
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+Zvelte eliminates the tedious setup process for SvelteKit projects. Instead of manually configuring Shadcn UI, Tailwind CSS, and internationalization, get a production-ready project with a single command.
 
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="One-Command Setup" icon="rocket" iconType="solid">
+    Create a fully configured SvelteKit project in seconds with `bunx @queaxtra/zvelte create`
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Pre-configured Template" icon="box" iconType="solid">
+    Includes Shadcn UI components, Tailwind CSS styling, and i18n support out of the box
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Package Manager Choice" icon="package" iconType="solid">
+    Support for bun, npm, pnpm, and yarn with automatic dependency installation
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Smart Initialization" icon="wand-magic-sparkles" iconType="solid">
+    Automatically updates package.json with your project name and version
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## Quick Start
 
-Everything you need to create world-class documentation.
+Get started with Zvelte in under a minute:
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+<CodeGroup>
 
-## Need inspiration?
+```bash bun
+bunx @queaxtra/zvelte create my-app
+cd my-app
+bun install
+bun run dev
+```
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+```bash npm
+bunx @queaxtra/zvelte create my-app
+cd my-app
+npm install
+npm run dev
+```
+
+```bash pnpm
+bunx @queaxtra/zvelte create my-app
+cd my-app
+pnpm install
+pnpm dev
+```
+
+```bash yarn
+bunx @queaxtra/zvelte create my-app
+cd my-app
+yarn install
+yarn dev
+```
+
+</CodeGroup>
+
+## Key Features
+
+<CardGroup cols={3}>
+  <Card title="Installation" icon="download" href="/installation">
+    Learn how to install and set up Zvelte
+  </Card>
+  <Card title="Create Command" icon="terminal" href="/usage/create-command">
+    Understand the create command and its options
+  </Card>
+  <Card title="Package Managers" icon="boxes-stacked" href="/usage/package-managers">
+    Choose your preferred package manager
+  </Card>
+  <Card title="Configuration" icon="gear" href="/configuration/package-json">
+    Customize your project configuration
+  </Card>
+  <Card title="Commands Reference" icon="book" href="/reference/commands">
+    Complete command reference
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/reference/troubleshooting">
+    Solutions to common issues
+  </Card>
+</CardGroup>
+
+## What's Included?
+
+The scaffolded template includes:
+
+- **SvelteKit** - Modern web framework with excellent DX
+- **Shadcn UI** - Beautiful, accessible component library
+- **Tailwind CSS** - Utility-first CSS framework
+- **i18n Support** - Internationalization ready from day one
+- **TypeScript** - Type safety and better developer experience
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart Guide" icon="bolt" href="/quickstart">
+    Create your first project and explore the features
+  </Card>
+  <Card title="Command Reference" icon="list" href="/reference/commands">
+    View all available commands and options
+  </Card>
+</CardGroup>

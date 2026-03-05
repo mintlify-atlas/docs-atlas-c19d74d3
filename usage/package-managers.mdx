@@ -1,0 +1,265 @@
+---
+title: "Package Managers"
+description: "Configure automatic dependency installation with your preferred package manager (bun, pnpm, npm, or yarn)"
+---
+
+## Overview
+
+Zvelte CLI supports automatic dependency installation during project creation using the `--install` flag. You can specify your preferred package manager or let Zvelte prompt you to choose from the ones installed on your system.
+
+## Supported Package Managers
+
+Zvelte supports the following package managers:
+
+<CardGroup cols={2}>
+  <Card title="Bun" icon="rabbit-running">
+    Fast all-in-one JavaScript runtime and toolkit
+  </Card>
+  <Card title="pnpm" icon="box">
+    Fast, disk space efficient package manager
+  </Card>
+  <Card title="npm" icon="npm">
+    Default Node.js package manager
+  </Card>
+  <Card title="Yarn" icon="yarn">
+    Fast, reliable, and secure dependency management
+  </Card>
+</CardGroup>
+
+## The --install Flag
+
+The `--install` flag controls whether and how dependencies are installed after project creation.
+
+### Syntax Options
+
+<CodeGroup>
+
+```bash Specify Package Manager
+bunx @queaxtra/zvelte create my-app --install=bun
+bunx @queaxtra/zvelte create my-app --install=pnpm
+bunx @queaxtra/zvelte create my-app --install=npm
+bunx @queaxtra/zvelte create my-app --install=yarn
+```
+
+```bash Interactive Selection
+# Prompts you to choose from installed package managers
+bunx @queaxtra/zvelte create my-app --install
+```
+
+```bash No Installation
+# Creates project without installing dependencies
+bunx @queaxtra/zvelte create my-app
+```
+
+</CodeGroup>
+
+## Interactive Package Manager Selection
+
+When you use `--install` without specifying a package manager, Zvelte will:
+
+<Steps>
+  <Step title="Detect Installed Package Managers">
+    Scans your system for available package managers (bun, pnpm, npm, yarn) by checking if each command is executable.
+  </Step>
+  
+  <Step title="Present Interactive Menu">
+    Shows you a selection menu with all detected package managers plus a "None" option.
+  </Step>
+  
+  <Step title="Install Dependencies">
+    Runs the installation command for your selected package manager in the project directory.
+  </Step>
+</Steps>
+
+### Example Interactive Flow
+
+```bash
+$ bunx @queaxtra/zvelte create my-app --install
+
+Creating new project in /home/user/my-app...
+Project created successfully!
+
+? Which package manager do you want to use for installation? › 
+❯ bun
+  pnpm
+  npm
+  None
+
+Installing dependencies with bun...
+
+Dependencies installed successfully!
+```
+
+<Info>
+  The interactive prompt only shows package managers that are actually installed on your system, making it impossible to select an unavailable option.
+</Info>
+
+## Auto-Detection Logic
+
+Zvelte's package manager detection works by attempting to run each package manager's version command:
+
+```javascript
+// Checks if command exists by running: <command> --version
+const availablePms = ['bun', 'pnpm', 'npm', 'yarn'].filter(isCommandInstalled);
+```
+
+This ensures that:
+- Only functional package managers are offered
+- You never encounter "command not found" errors
+- The selection menu is tailored to your environment
+
+## Installation Process
+
+When dependencies are being installed, you'll see:
+
+```bash
+Installing dependencies with bun...
+# Package manager output appears here
+
+Dependencies installed successfully!
+```
+
+The installation runs the equivalent of:
+
+<CodeGroup>
+
+```bash Bun
+bun install
+```
+
+```bash pnpm
+pnpm install
+```
+
+```bash npm
+npm install
+```
+
+```bash Yarn
+yarn install
+```
+
+</CodeGroup>
+
+## Error Handling
+
+### Package Manager Not Found
+
+If you specify a package manager that isn't installed:
+
+```bash
+$ bunx @queaxtra/zvelte create my-app --install=pnpm
+
+Project created successfully!
+Warning: pnpm is not installed. Skipping dependency installation.
+```
+
+<Warning>
+  When a specified package manager is not found, Zvelte will **skip installation** rather than fail. Your project will be created successfully, but you'll need to manually install dependencies.
+</Warning>
+
+### No Package Managers Available
+
+If you use `--install` but no package managers are detected:
+
+```bash
+Warning: No package managers (bun, pnpm, npm, yarn) found. 
+Skipping dependency installation.
+```
+
+### Installation Failure
+
+If the installation process fails (exit code ≠ 0):
+
+```bash
+Error: Dependency installation failed with code 1
+```
+
+In this case:
+- Your project files are still created successfully
+- You can manually run the installation command
+- Check the package manager output for specific error details
+
+## Manual Installation
+
+If you create a project without the `--install` flag, you can manually install dependencies:
+
+<CodeGroup>
+
+```bash Navigate and Install
+cd my-app
+bun install
+```
+
+```bash With pnpm
+cd my-app
+pnpm install
+```
+
+```bash With npm
+cd my-app
+pm install
+```
+
+```bash With Yarn
+cd my-app
+yarn install
+```
+
+</CodeGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use --install for faster setup">
+    Including `--install` in your create command saves time by automating the dependency installation step.
+    
+    ```bash
+    bunx @queaxtra/zvelte create my-app --install=bun
+    ```
+  </Accordion>
+  
+  <Accordion title="Specify your preferred package manager">
+    If you have multiple package managers installed, explicitly specify which one to use to avoid the interactive prompt:
+    
+    ```bash
+    bunx @queaxtra/zvelte create my-app --install=pnpm
+    ```
+  </Accordion>
+  
+  <Accordion title="Use interactive mode when uncertain">
+    If you're not sure which package managers are available, use `--install` without a value to see your options:
+    
+    ```bash
+    bunx @queaxtra/zvelte create my-app --install
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  **Bun users**: Since you're already using `bunx` to run Zvelte, `--install=bun` is often the most consistent choice for your workflow.
+</Tip>
+
+## Starting Development
+
+After dependencies are installed, start your development server:
+
+<CodeGroup>
+
+```bash Bun
+bun run dev
+```
+
+```bash pnpm
+pnpm dev
+```
+
+```bash npm
+npm run dev
+```
+
+```bash Yarn
+yarn dev
+```
+
+</CodeGroup>

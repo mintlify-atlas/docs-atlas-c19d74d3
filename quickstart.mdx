@@ -1,80 +1,272 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Create your first SvelteKit project with Zvelte in minutes and start building.
 ---
 
-## Get started in three steps
+This guide will walk you through creating your first SvelteKit project using Zvelte. You'll have a fully configured, production-ready application running in minutes.
 
-Get your documentation site running locally and make your first customization.
+## Create Your First Project
 
-### Step 1: Set up your local environment
-
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+<Steps>
+  <Step title="Run the create command">
+    Open your terminal and run Zvelte with your desired project name:
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+    <CodeGroup>
+    ```bash Bun with auto-install
+    bunx @queaxtra/zvelte create my-awesome-project --install=bun
+    ```
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+    ```bash Without auto-install
+    bunx @queaxtra/zvelte create my-awesome-project
+    ```
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    ```bash Current directory
+    bunx @queaxtra/zvelte create . --install
+    ```
+    </CodeGroup>
+    
+    <Note>
+      Replace `my-awesome-project` with your desired project name. Use `.` to create the project in the current directory.
+    </Note>
+    
+    This command will:
+    - Clone the SvelteKit template from [sveltekit-shadcn-template](https://github.com/Queaxtra/sveltekit-shadcn-template)
+    - Remove the `.git` directory for a clean start
+    - Update `package.json` with your project name
+    - Optionally install dependencies with your chosen package manager
+  </Step>
+  
+  <Step title="Choose package manager (if prompted)">
+    If you used the `--install` flag without specifying a package manager, Zvelte will prompt you to choose:
+    
+    ```
+    ? Which package manager do you want to use for installation?
+    ❯ bun
+      pnpm
+      npm
+      yarn
+      None
+    ```
+    
+    <Tip>
+      Zvelte automatically detects which package managers are installed on your system and only shows available options.
+    </Tip>
+    
+    Select your preferred package manager using arrow keys and press Enter.
+  </Step>
+  
+  <Step title="Wait for setup to complete">
+    Zvelte will now clone the template and set up your project. You'll see output similar to:
+    
+    ```bash
+    Creating new project in /path/to/my-awesome-project...
+    Cloning into 'my-awesome-project'...
+    remote: Enumerating objects: 150, done.
+    remote: Counting objects: 100% (150/150), done.
+    remote: Compressing objects: 100% (95/95), done.
+    remote: Total 150 (delta 45), reused 130 (delta 35)
+    Receiving objects: 100% (150/150), 245.00 KiB | 2.50 MiB/s, done.
+    Resolving deltas: 100% (45/45), done.
+    Removed .git directory.
+    Project created successfully!
+    ```
+    
+    If you enabled dependency installation:
+    
+    ```bash
+    Installing dependencies with bun...
+    bun install v1.0.0
+    
+    + 150 packages installed [2.50s]
+    
+    Dependencies installed successfully!
+    ```
+  </Step>
+  
+  <Step title="Navigate to your project">
+    Change into your new project directory:
+    
+    ```bash
+    cd my-awesome-project
+    ```
+    
+    If you created the project in the current directory (using `.`), you're already there!
+  </Step>
+  
+  <Step title="Install dependencies (if not already installed)">
+    If you skipped automatic installation, install dependencies now:
+    
+    <CodeGroup>
+    ```bash Bun
+    bun install
+    ```
+    
+    ```bash npm
+    npm install
+    ```
+    
+    ```bash pnpm
+    pnpm install
+    ```
+    
+    ```bash Yarn
+    yarn install
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="Start the development server">
+    Launch the development server to see your project in action:
+    
+    <CodeGroup>
+    ```bash Bun
+    bun run dev
+    ```
+    
+    ```bash npm
+    npm run dev
+    ```
+    
+    ```bash pnpm
+    pnpm dev
+    ```
+    
+    ```bash Yarn
+    yarn dev
+    ```
+    </CodeGroup>
+    
+    You should see output like:
+    
+    ```bash
+    
+      VITE v5.0.0  ready in 500 ms
+    
+      ➜  Local:   http://localhost:5173/
+      ➜  Network: use --host to expose
+      ➜  press h + enter to show help
+    ```
+  </Step>
+  
+  <Step title="Open in your browser">
+    Open your browser and navigate to:
+    
+    ```
+    http://localhost:5173
+    ```
+    
+    You should see your new SvelteKit application running with Shadcn UI components and Tailwind CSS styling!
+  </Step>
+</Steps>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+## What You Get
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
+Your new project includes:
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="SvelteKit Framework" icon="code">
+    Full SvelteKit setup with file-based routing, server-side rendering, and optimized builds.
+  </Card>
+  
+  <Card title="Shadcn UI Components" icon="palette">
+    Beautiful, accessible components built on Radix UI primitives.
+  </Card>
+  
+  <Card title="Tailwind CSS" icon="paintbrush">
+    Utility-first CSS framework configured and ready to use.
+  </Card>
+  
+  <Card title="Internationalization" icon="globe">
+    Built-in i18n support for multi-language applications.
+  </Card>
 </CardGroup>
 
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+## Project Configuration
+
+Zvelte automatically updates your `package.json` with:
+
+```json
+{
+  "name": "my-awesome-project",
+  "version": "0.0.1",
+  "description": "",
+  // ... rest of the configuration
+}
+```
+
+<Info>
+  - **name**: Set to your project directory name
+  - **version**: Reset to `0.0.1`
+  - **description**: Cleared to an empty string for you to customize
+</Info>
+
+## Common Use Cases
+
+<Accordion title="Create project in current directory">
+  If you want to create a project in the current directory instead of a new folder:
+  
+  ```bash
+  bunx @queaxtra/zvelte create . --install=bun
+  ```
+  
+  <Warning>
+    The current directory must be empty, or files will be merged. Conflicting files will cause an error.
+  </Warning>
+</Accordion>
+
+<Accordion title="Skip dependency installation">
+  If you want to install dependencies later or use a different method:
+  
+  ```bash
+  bunx @queaxtra/zvelte create my-project
+  ```
+  
+  Then install manually when ready:
+  
+  ```bash
+  cd my-project
+  bun install
+  ```
+</Accordion>
+
+<Accordion title="Use specific package manager">
+  Specify your preferred package manager directly:
+  
+  <CodeGroup>
+  ```bash Bun
+  bunx @queaxtra/zvelte create my-project --install=bun
+  ```
+  
+  ```bash pnpm
+  bunx @queaxtra/zvelte create my-project --install=pnpm
+  ```
+  
+  ```bash npm
+  bunx @queaxtra/zvelte create my-project --install=npm
+  ```
+  
+  ```bash Yarn
+  bunx @queaxtra/zvelte create my-project --install=yarn
+  ```
+  </CodeGroup>
+</Accordion>
+
+## Next Steps
+
+<CardGroup cols={3}>
+  <Card title="CLI Reference" icon="terminal" href="/reference/commands">
+    Explore all available commands and options.
+  </Card>
+  
+  <Card title="Template Documentation" icon="book" href="https://github.com/Queaxtra/sveltekit-shadcn-template">
+    Learn about the template's features and structure.
+  </Card>
+  
+  <Card title="SvelteKit Docs" icon="book-open" href="https://kit.svelte.dev/docs">
+    Dive into SvelteKit's official documentation.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Start building your application by editing `src/routes/+page.svelte` - changes will hot-reload automatically!
+</Tip>

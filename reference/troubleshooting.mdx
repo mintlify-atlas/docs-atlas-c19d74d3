@@ -1,0 +1,382 @@
+---
+title: Troubleshooting
+description: Common issues and solutions when using Zvelte CLI
+---
+
+## Common Issues
+
+This guide covers common problems you might encounter when using Zvelte and how to resolve them.
+
+<AccordionGroup>
+  <Accordion title="Git clone failed with code 128">
+    **Error Message:**
+    ```
+    Error: Git clone failed with code 128
+    ```
+
+    **Cause:**
+    
+    This error occurs when Git cannot clone the template repository. Common reasons include:
+    - Git is not installed on your system
+    - No internet connection or network issues
+    - GitHub is unreachable
+    - Repository URL is blocked by firewall
+
+    **Solution:**
+
+    1. Verify Git is installed:
+       ```bash
+       git --version
+       ```
+       If not installed, download from [git-scm.com](https://git-scm.com/)
+
+    2. Check your internet connection:
+       ```bash
+       ping github.com
+       ```
+
+    3. Try cloning the template manually to diagnose:
+       ```bash
+       git clone https://github.com/Queaxtra/sveltekit-shadcn-template.git test-clone
+       ```
+
+    4. If behind a proxy, configure Git:
+       ```bash
+       git config --global http.proxy http://proxy.example.com:8080
+       ```
+  </Accordion>
+
+  <Accordion title="Directory already exists and is not empty">
+    **Error Message:**
+    ```
+    Error: Directory 'my-project' already exists and is not empty.
+    ```
+
+    **Cause:**
+    
+    You're trying to create a project in a directory that already exists and contains files. Zvelte prevents accidental overwrites by refusing to proceed.
+
+    **Solution:**
+
+    Choose one of the following options:
+
+    1. **Use a different directory name:**
+       ```bash
+       bunx @queaxtra/zvelte create my-new-project
+       ```
+
+    2. **Remove the existing directory:**
+       ```bash
+       rm -rf my-project
+       bunx @queaxtra/zvelte create my-project
+       ```
+
+    3. **Use the current directory syntax** (if you want to merge):
+       ```bash
+       cd my-project
+       bunx @queaxtra/zvelte create .
+       ```
+       <Warning>
+         This will only work if there are no conflicting files between the template and your existing files.
+       </Warning>
+  </Accordion>
+
+  <Accordion title="Conflicting files detected when using current directory">
+    **Error Message:**
+    ```
+    Error: Aborting. Your directory contains files that would conflict with the template:
+    package.json
+    src
+    vite.config.js
+    ```
+
+    **Cause:**
+    
+    When using `.` to create a project in the current directory, Zvelte detects files that would be overwritten by the template. This is from the `handleCurrentDirMerge` function that compares existing files with template files.
+
+    **Solution:**
+
+    1. **Move or rename conflicting files:**
+       ```bash
+       mv package.json package.json.backup
+       mv src src-old
+       bunx @queaxtra/zvelte create .
+       ```
+
+    2. **Use a subdirectory instead:**
+       ```bash
+       bunx @queaxtra/zvelte create my-project
+       ```
+
+    3. **Start in an empty directory:**
+       ```bash
+       mkdir fresh-start
+       cd fresh-start
+       bunx @queaxtra/zvelte create .
+       ```
+  </Accordion>
+
+  <Accordion title="Package manager not found warning">
+    **Warning Message:**
+    ```
+    Warning: bun is not installed. Skipping dependency installation.
+    ```
+    or
+    ```
+    Warning: No package managers (bun, pnpm, npm, yarn) found. Skipping dependency installation.
+    ```
+
+    **Cause:**
+    
+    The specified package manager (or any package manager) is not available on your system. Zvelte checks availability using `<pm> --version`.
+
+    **Solution:**
+
+    1. **Install the package manager:**
+       
+       For Bun:
+       ```bash
+       curl -fsSL https://bun.sh/install | bash
+       ```
+
+       For pnpm:
+       ```bash
+       npm install -g pnpm
+       ```
+
+       For npm (comes with Node.js):
+       ```bash
+       # Download from nodejs.org
+       ```
+
+       For Yarn:
+       ```bash
+       npm install -g yarn
+       ```
+
+    2. **Verify installation:**
+       ```bash
+       bun --version
+       # or
+       pnpm --version
+       ```
+
+    3. **Install dependencies manually:**
+       If you prefer to skip automatic installation:
+       ```bash
+       cd my-project
+       npm install  # or bun install, pnpm install, yarn
+       ```
+  </Accordion>
+
+  <Accordion title="Path traversal detected in project directory">
+    **Error Message:**
+    ```
+    Error: Path traversal detected in project directory.
+    ```
+
+    **Cause:**
+    
+    The project directory path contains potentially malicious path traversal patterns (e.g., `../`, symbolic links, or unusual path normalization). This is a security feature in the `validateTargetDir` function.
+
+    **Solution:**
+
+    1. **Use a simple directory name:**
+       ```bash
+       bunx @queaxtra/zvelte create my-project
+       ```
+
+    2. **Avoid special path characters:**
+       - Don't use `../` in the path
+       - Avoid symbolic links
+       - Use straightforward directory names
+
+    3. **Use absolute paths:**
+       ```bash
+       bunx @queaxtra/zvelte create /home/user/projects/my-project
+       ```
+  </Accordion>
+
+  <Accordion title="Invalid project directory provided">
+    **Error Message:**
+    ```
+    Error: Invalid project directory provided.
+    ```
+
+    **Cause:**
+    
+    The project directory argument is missing, empty, or not a valid string.
+
+    **Solution:**
+
+    Make sure to provide a directory name:
+
+    ```bash
+    # Wrong
+    bunx @queaxtra/zvelte create
+
+    # Correct
+    bunx @queaxtra/zvelte create my-project
+    ```
+
+    Or use `.` for the current directory:
+    ```bash
+    bunx @queaxtra/zvelte create .
+    ```
+  </Accordion>
+
+  <Accordion title="Dependency installation failed with code 1">
+    **Error Message:**
+    ```
+    Error: Dependency installation failed with code 1
+    ```
+
+    **Cause:**
+    
+    The package manager encountered an error while installing dependencies. This can happen due to:
+    - Network connectivity issues
+    - Registry unavailable (npm, yarn)
+    - Corrupted package cache
+    - Incompatible Node.js version
+    - Disk space issues
+
+    **Solution:**
+
+    1. **Check Node.js version:**
+       ```bash
+       node --version
+       ```
+       Ensure you're using a supported version (check `package.json` for `engines` field)
+
+    2. **Clear package manager cache:**
+       ```bash
+       # npm
+       npm cache clean --force
+
+       # yarn
+       yarn cache clean
+
+       # pnpm
+       pnpm store prune
+
+       # bun
+       bun pm cache rm
+       ```
+
+    3. **Try installing manually:**
+       ```bash
+       cd my-project
+       rm -rf node_modules package-lock.json
+       npm install
+       ```
+
+    4. **Check available disk space:**
+       ```bash
+       df -h
+       ```
+  </Accordion>
+
+  <Accordion title="Failed to remove .git directory">
+    **Error Message:**
+    ```
+    Failed to remove .git directory: [error details]
+    ```
+
+    **Cause:**
+    
+    After cloning the template, Zvelte attempts to remove the `.git` directory but encounters a permission error or file lock.
+
+    **Solution:**
+
+    1. **Check file permissions:**
+       ```bash
+       ls -la my-project/.git
+       ```
+
+    2. **Remove manually with elevated permissions:**
+       ```bash
+       # On Unix/Linux/macOS
+       sudo rm -rf my-project/.git
+
+       # On Windows (PowerShell as Administrator)
+       Remove-Item -Recurse -Force my-project/.git
+       ```
+
+    3. **Close any programs accessing the directory:**
+       - IDEs (VS Code, WebStorm)
+       - File explorers
+       - Git GUI clients
+
+    <Note>
+      The project will still be functional even if the `.git` directory removal fails. You can initialize a new Git repository afterwards:
+      ```bash
+      cd my-project
+      rm -rf .git
+      git init
+      ```
+    </Note>
+  </Accordion>
+
+  <Accordion title="Command not found: bunx">
+    **Error Message:**
+    ```
+    bunx: command not found
+    ```
+
+    **Cause:**
+    
+    Bun is not installed on your system, or it's not in your PATH.
+
+    **Solution:**
+
+    1. **Install Bun:**
+       ```bash
+       curl -fsSL https://bun.sh/install | bash
+       ```
+
+    2. **Verify installation:**
+       ```bash
+       bunx --version
+       ```
+
+    3. **Alternative: Use npx instead:**
+       ```bash
+       npx @queaxtra/zvelte create my-project
+       ```
+
+    4. **Add Bun to PATH** (if installed but not found):
+       ```bash
+       # Add to ~/.bashrc or ~/.zshrc
+       export PATH="$HOME/.bun/bin:$PATH"
+       ```
+  </Accordion>
+</AccordionGroup>
+
+## Getting Help
+
+If you encounter an issue not covered here:
+
+1. **Check the help message:**
+   ```bash
+   bunx @queaxtra/zvelte --help
+   ```
+
+2. **Review the error message carefully** - it often contains specific details about what went wrong
+
+3. **Open an issue** on the [GitHub repository](https://github.com/Queaxtra/zvelte) with:
+   - Complete error message
+   - Command you ran
+   - Operating system and version
+   - Node.js and package manager versions
+
+## Debugging Tips
+
+<Note>
+  Most errors in Zvelte include colored output:
+  - **Yellow**: Warnings (non-fatal)
+  - **Red**: Errors (fatal)
+  - **Blue**: Information messages
+  - **Green**: Success messages
+</Note>
+
+When reporting issues, include the full colored output if possible, as it contains valuable debugging information.

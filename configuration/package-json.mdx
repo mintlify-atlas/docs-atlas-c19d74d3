@@ -1,0 +1,119 @@
+---
+title: 'package.json Updates'
+description: 'Learn how Zvelte automatically configures your package.json file during project creation'
+---
+
+## Overview
+
+When you create a new project with Zvelte, the CLI automatically updates your `package.json` file with project-specific details. This ensures your project starts with clean, appropriate metadata based on your chosen project directory name.
+
+## Automatic Updates
+
+The `updatePackageJson` function runs immediately after cloning the template and modifies three key fields in your `package.json`:
+
+<ParamField path="name" type="string">
+  Set to the project directory name using `path.basename()`. For example, if you create a project in `my-awesome-app`, the name field will be set to `my-awesome-app`.
+</ParamField>
+
+<ParamField path="description" type="string">
+  Reset to an empty string, allowing you to add your own project description.
+</ParamField>
+
+<ParamField path="version" type="string">
+  Set to `0.0.1` to indicate this is a fresh project starting at the initial version.
+</ParamField>
+
+## How It Works
+
+The update process happens automatically during the `create` command workflow:
+
+```javascript
+function updatePackageJson(projectPath) {
+  const packageJsonPath = path.join(projectPath, 'package.json');
+  if (!fs.existsSync(packageJsonPath)) {
+    return;
+  }
+
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+  const projectName = path.basename(projectPath);
+  packageJson.name = projectName;
+  packageJson.description = '';
+  packageJson.version = '0.0.1';
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+}
+```
+
+The function reads your project path, extracts the directory name, and updates the package.json file in place.
+
+## Before and After Example
+
+### Before (Template Default)
+
+```json package.json
+{
+  "name": "sveltekit-shadcn-template",
+  "description": "A SvelteKit template with Shadcn UI components",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    // ... dependencies
+  }
+}
+```
+
+### After (Your Project)
+
+Assuming you created a project with:
+
+```bash
+bunx @queaxtra/zvelte create my-sveltekit-app
+```
+
+Your `package.json` will be updated to:
+
+```json package.json
+{
+  "name": "my-sveltekit-app",
+  "description": "",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    // ... dependencies
+  }
+}
+```
+
+<Note>
+  All other fields in the `package.json` file remain unchanged, including scripts, dependencies, and devDependencies.
+</Note>
+
+## Project Name Derivation
+
+The project name is derived from the directory path you provide:
+
+- **Absolute path**: `zvelte create /home/user/projects/my-app` → name: `my-app`
+- **Relative path**: `zvelte create ./awesome-project` → name: `awesome-project`
+- **Current directory**: `zvelte create .` → name: `current-directory-name`
+
+The CLI uses Node.js's `path.basename()` function to extract only the final segment of the path.
+
+## Customization
+
+After project creation, you can manually edit your `package.json` to:
+
+- Add a meaningful description
+- Update the version number as your project evolves
+- Change the name if needed
+- Add additional metadata like author, license, keywords, and repository information
+
+<Info>
+  The automatic updates only happen once during project creation. Subsequent runs of Zvelte commands won't modify your package.json file.
+</Info>

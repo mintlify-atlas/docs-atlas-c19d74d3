@@ -1,0 +1,164 @@
+---
+title: Options
+description: Complete reference for all Zvelte CLI options and flags
+---
+
+## Overview
+
+Zvelte CLI options modify the behavior of commands. All options can be combined with commands to customize project creation.
+
+## Available Options
+
+### --install
+
+Installs project dependencies automatically after creating the project.
+
+<ParamField path="--install" type="flag">
+  Prompts you to select a package manager from available options (bun, pnpm, npm, yarn).
+</ParamField>
+
+<ParamField path="--install=<pm>" type="string">
+  Installs dependencies using the specified package manager without prompting.
+  
+  **Accepted values**: `bun`, `pnpm`, `npm`, `yarn`
+</ParamField>
+
+#### Behavior
+
+When you use the `--install` flag:
+
+1. **With value** (e.g., `--install=bun`):
+   - Checks if the specified package manager is installed
+   - If installed: Runs `<pm> install` in the project directory
+   - If not installed: Displays a warning and skips installation
+
+2. **Without value** (e.g., `--install`):
+   - Detects all available package managers on your system
+   - Presents an interactive prompt to choose one
+   - Includes a "None" option to skip installation
+   - If no package managers are found: Displays a warning and skips
+
+<Note>
+  The tool checks for package manager availability by running `<pm> --version`. If the command fails, the package manager is considered unavailable.
+</Note>
+
+#### Examples
+
+Install with a specific package manager:
+
+```bash
+bunx @queaxtra/zvelte create my-project --install=bun
+```
+
+Prompt for package manager selection:
+
+```bash
+bunx @queaxtra/zvelte create my-project --install
+```
+
+Skip installation (create project only):
+
+```bash
+bunx @queaxtra/zvelte create my-project
+```
+
+#### Warning Messages
+
+If the specified package manager is not installed:
+
+```
+Warning: bun is not installed. Skipping dependency installation.
+```
+
+If no package managers are found (when using `--install` without a value):
+
+```
+Warning: No package managers (bun, pnpm, npm, yarn) found. Skipping dependency installation.
+```
+
+#### Success Message
+
+When dependencies are installed successfully:
+
+```
+Installing dependencies with bun...
+
+Dependencies installed successfully!
+```
+
+### -h, --help
+
+Displays the help message with usage information.
+
+<ParamField path="-h" type="flag">
+  Short form of the help flag.
+</ParamField>
+
+<ParamField path="--help" type="flag">
+  Long form of the help flag. Functionally identical to `-h`.
+</ParamField>
+
+#### Behavior
+
+- Displays the complete usage message
+- Shows all available commands, arguments, and options
+- Includes practical examples
+- Exits immediately without running any commands
+
+#### Examples
+
+```bash
+bunx @queaxtra/zvelte --help
+bunx @queaxtra/zvelte -h
+```
+
+Both commands produce the same output:
+
+```
+Usage: bunx @queaxtra/zvelte <command> [options]
+
+Commands:
+  create <project-directory>  Creates a new SvelteKit project using a predefined template.
+
+Arguments:
+  <project-directory>  The directory for the new project.
+                       Use '.' to use the current directory.
+
+Options:
+  --install[=<pm>]     Installs dependencies using the specified package manager (bun, pnpm, npm, yarn).
+                       If no package manager is specified, you will be prompted to choose.
+  -h, --help           Displays this help message.
+
+Examples:
+  bunx @queaxtra/zvelte create my-awesome-project --install=bun
+```
+
+## Option Combinations
+
+You can combine multiple options with commands:
+
+```bash
+# Create project with automatic installation
+bunx @queaxtra/zvelte create my-project --install=pnpm
+
+# Create in current directory with interactive package manager selection
+bunx @queaxtra/zvelte create . --install
+```
+
+<Warning>
+  Options must come after the command and project directory argument. Placing options in the wrong order may cause them to be ignored.
+</Warning>
+
+## Default Behavior
+
+When no options are specified:
+
+- Project is created without installing dependencies
+- You must manually run `<pm> install` after project creation
+- No interactive prompts are displayed
+
+```bash
+bunx @queaxtra/zvelte create my-project
+cd my-project
+bun install  # Manual installation required
+```

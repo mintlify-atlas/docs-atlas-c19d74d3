@@ -1,0 +1,174 @@
+---
+title: 'Template Structure'
+description: 'Explore the sveltekit-shadcn-template that powers Zvelte projects'
+---
+
+## Overview
+
+Zvelte uses the [sveltekit-shadcn-template](https://github.com/Queaxtra/sveltekit-shadcn-template) as its foundation. This production-ready template provides a modern tech stack with pre-configured tools and libraries to accelerate your development workflow.
+
+## Template Repository
+
+The template is cloned from:
+
+```
+https://github.com/Queaxtra/sveltekit-shadcn-template.git
+```
+
+During project creation, Zvelte clones this repository and removes the `.git` directory to give you a clean slate for your own version control.
+
+## What's Included
+
+The template comes with a carefully curated set of features and integrations:
+
+<CardGroup cols={2}>
+  <Card title="SvelteKit" icon="rocket">
+    Full-stack framework for building web applications with Svelte, including routing, server-side rendering, and API endpoints.
+  </Card>
+  
+  <Card title="Shadcn UI" icon="palette">
+    Beautiful, accessible UI components built with Radix UI primitives and styled with Tailwind CSS.
+  </Card>
+  
+  <Card title="Tailwind CSS" icon="paintbrush">
+    Utility-first CSS framework for rapid UI development with consistent design patterns.
+  </Card>
+  
+  <Card title="Internationalization (i18n)" icon="globe">
+    Built-in support for multiple languages, making your app ready for a global audience.
+  </Card>
+</CardGroup>
+
+## Template Cloning Process
+
+When you run the `create` command, Zvelte executes the following workflow:
+
+```javascript
+async function cloneRepository(projectPath) {
+  return new Promise((resolve, reject) => {
+    const gitProcess = spawn('git', ['clone', REPO_URL, projectPath], {
+      stdio: 'inherit'
+    });
+
+    gitProcess.on('close', (code) => {
+      if (code === 0) {
+        return resolve();
+      }
+      const error = new Error(`Git clone failed with code ${code}`);
+      console.error(error.message);
+      reject(error);
+    });
+  });
+}
+```
+
+The process:
+
+1. **Clone**: Uses `git clone` to fetch the template repository
+2. **Remove Git History**: Deletes the `.git` directory to start fresh
+3. **Update Configuration**: Modifies `package.json` with your project details
+4. **Install Dependencies**: Optionally installs dependencies with your chosen package manager
+
+<Info>
+  The template repository is maintained separately from the Zvelte CLI, allowing independent updates and improvements to the template itself.
+</Info>
+
+## Customizing the Template
+
+After creating your project, you can customize it to fit your needs:
+
+### Modify Tailwind Configuration
+
+Edit `tailwind.config.js` to adjust colors, fonts, and design tokens:
+
+```javascript tailwind.config.js
+export default {
+  content: ['./src/**/*.{html,js,svelte,ts}'],
+  theme: {
+    extend: {
+      colors: {
+        // Add your custom colors
+      }
+    }
+  },
+  plugins: []
+};
+```
+
+### Configure Internationalization
+
+Update i18n settings to add or remove languages based on your target audience.
+
+### Add or Remove Components
+
+The Shadcn UI components are source code, not a package dependency. You can modify or remove any component in your project.
+
+### Customize Project Structure
+
+Reorganize directories and files to match your team's conventions or project requirements.
+
+<Note>
+  The template is designed to be a starting point, not a rigid structure. Feel free to adapt it to your workflow.
+</Note>
+
+## Current Directory Merging
+
+When you use `zvelte create .` in a non-empty directory, Zvelte performs a smart merge:
+
+```javascript
+async function handleCurrentDirMerge(projectPath, tempDir) {
+  console.log('Cloning template repository into a temporary directory...');
+  await cloneRepository(tempDir);
+  fs.rmSync(path.join(tempDir, '.git'), { recursive: true, force: true });
+
+  const templateFiles = fs.readdirSync(tempDir);
+  const projectFiles = fs.readdirSync(projectPath);
+  const conflictingFiles = templateFiles.filter((file) =>
+    projectFiles.includes(file)
+  );
+
+  if (conflictingFiles.length > 0) {
+    throw new Error(
+      `Aborting. Your directory contains files that would conflict with the template: ${conflictingFiles.join('\n')}`
+    );
+  }
+
+  console.log('Copying project files...');
+  for (const file of templateFiles) {
+    fs.cpSync(path.join(tempDir, file), path.join(projectPath, file), {
+      recursive: true
+    });
+  }
+}
+```
+
+This ensures:
+
+- No existing files are overwritten
+- Conflicts are detected before any changes are made
+- Your existing work is preserved
+
+## Template Repository Access
+
+You can view the template source code, report issues, or contribute improvements:
+
+<Card
+  title="Visit the Template Repository"
+  icon="github"
+  href="https://github.com/Queaxtra/sveltekit-shadcn-template"
+>
+  Explore the full template source code, view the README, and see what's included before creating your project.
+</Card>
+
+## Keeping Up with Template Updates
+
+Since the template is cloned and detached from its source:
+
+- Template updates don't automatically apply to existing projects
+- You can manually cherry-pick improvements from the template repository
+- Create new projects to get the latest template version
+- Consider using tools like `git remote add template <repo-url>` to pull updates selectively
+
+<Note>
+  Each Zvelte project is independent. To benefit from template improvements, you'll need to manually integrate changes or create a new project.
+</Note>

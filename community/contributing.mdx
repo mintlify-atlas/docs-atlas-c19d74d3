@@ -1,0 +1,151 @@
+---
+title: Contributing
+description: Learn how to contribute to Zvelte and help improve the CLI tool for the community
+---
+
+## Welcome Contributors
+
+We welcome contributions to Zvelte! Whether you're fixing bugs, adding features, improving documentation, or suggesting enhancements, your help is appreciated.
+
+<Note>
+Zvelte is an open-source project maintained by Queaxtra. We believe in building tools that empower developers to work faster and more efficiently.
+</Note>
+
+## Ways to Contribute
+
+<CardGroup cols={2}>
+  <Card title="Report Issues" icon="bug">
+    Found a bug or have a feature request? Open an issue on GitHub to let us know.
+  </Card>
+  <Card title="Submit Pull Requests" icon="code-pull-request">
+    Have a fix or improvement? Submit a PR and we'll review it promptly.
+  </Card>
+  <Card title="Improve Documentation" icon="book">
+    Help make our docs clearer and more comprehensive for everyone.
+  </Card>
+  <Card title="Share Feedback" icon="comments">
+    Your suggestions help shape the future of Zvelte.
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+<Steps>
+  <Step title="Fork the Repository">
+    Visit the [Zvelte GitHub repository](https://github.com/Queaxtra/zvelte) and fork it to your account.
+    
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/zvelte.git
+    cd zvelte
+    ```
+  </Step>
+
+  <Step title="Install Dependencies">
+    Zvelte uses Bun as its runtime. Install the project dependencies:
+    
+    ```bash
+    bun install
+    ```
+  </Step>
+
+  <Step title="Make Your Changes">
+    Create a new branch for your feature or fix:
+    
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+    
+    Make your changes and test them thoroughly.
+  </Step>
+
+  <Step title="Test Your Changes">
+    Test the CLI locally to ensure everything works as expected:
+    
+    ```bash
+    ./bin/zvelte.js create test-project
+    ```
+  </Step>
+
+  <Step title="Commit and Push">
+    Commit your changes with a clear, descriptive message:
+    
+    ```bash
+    git add .
+    git commit -m "Add: description of your changes"
+    git push origin feature/your-feature-name
+    ```
+  </Step>
+
+  <Step title="Open a Pull Request">
+    Go to the [Zvelte repository](https://github.com/Queaxtra/zvelte) and open a pull request from your branch. Provide a clear description of:
+    
+    - What changes you made
+    - Why you made them
+    - Any testing you performed
+  </Step>
+</Steps>
+
+## Reporting Issues
+
+When reporting issues, please include:
+
+- A clear description of the problem
+- Steps to reproduce the issue
+- Your environment (OS, Bun version, etc.)
+- Expected vs. actual behavior
+- Any error messages or logs
+
+<Card title="Open an Issue" icon="github" href="https://github.com/Queaxtra/zvelte/issues">
+  Submit bug reports and feature requests on GitHub
+</Card>
+
+## Code Guidelines
+
+To maintain code quality and consistency:
+
+- Write clear, descriptive commit messages
+- Keep changes focused and atomic
+- Test your changes before submitting
+- Follow the existing code style
+- Add comments for complex logic
+
+## Development Setup
+
+Zvelte is built with TypeScript and uses Bun as its runtime environment. The main CLI logic is in `bin/zvelte.js`, which handles:
+
+- Project scaffolding
+- Git operations for cloning the template
+- Automatic `package.json` updates
+- User prompts and interactions
+
+## Project Structure
+
+```
+zvelte/
+├── bin/
+│   └── zvelte.js       # Main CLI entry point
+├── package.json        # Project metadata
+├── LICENSE            # MIT License
+└── README.md          # Project documentation
+```
+
+## Community Guidelines
+
+We strive to maintain a welcoming and inclusive community:
+
+- Be respectful and constructive in discussions
+- Help others learn and grow
+- Give credit where credit is due
+- Focus on what's best for the project and community
+
+## Questions?
+
+If you have questions about contributing, feel free to:
+
+- Open a discussion on GitHub
+- Reach out to the maintainers
+- Check existing issues and pull requests for context
+
+<Note>
+Thank you for considering contributing to Zvelte! Every contribution, no matter how small, helps make the tool better for everyone.
+</Note>

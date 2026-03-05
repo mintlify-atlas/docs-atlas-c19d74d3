@@ -1,0 +1,139 @@
+---
+title: Commands
+description: Complete reference for all Zvelte CLI commands
+---
+
+## Overview
+
+Zvelte provides a simple command-line interface for creating new SvelteKit projects from a pre-configured template.
+
+## Command Syntax
+
+```bash
+bunx @queaxtra/zvelte <command> [options]
+```
+
+## Available Commands
+
+### create
+
+Creates a new SvelteKit project using a predefined template.
+
+<ParamField path="project-directory" type="string" required>
+  The directory for the new project. Use `.` to initialize in the current directory.
+</ParamField>
+
+#### Syntax
+
+```bash
+bunx @queaxtra/zvelte create <project-directory> [options]
+```
+
+#### Behavior
+
+The `create` command performs the following operations:
+
+1. **Validates** the target directory for security (prevents path traversal)
+2. **Clones** the [sveltekit-shadcn-template](https://github.com/Queaxtra/sveltekit-shadcn-template.git) repository
+3. **Removes** the `.git` directory to start fresh
+4. **Updates** `package.json` with project-specific details:
+   - Sets `name` to the project directory name
+   - Clears `description` to an empty string
+   - Sets `version` to "0.0.1"
+5. **Installs** dependencies (if `--install` flag is used)
+
+#### Current Directory Behavior
+
+When you use `.` as the project directory, Zvelte checks if the current directory is empty:
+
+- **Empty directory**: Clones the template directly
+- **Non-empty directory**: Clones to a temporary directory and merges files
+  - Aborts if conflicting files are detected
+  - Only copies files that don't already exist
+
+<Warning>
+  If you attempt to create a project in a non-empty directory (not using `.`), Zvelte will abort with an error to prevent accidental overwrites.
+</Warning>
+
+#### Examples
+
+Create a new project in a new directory:
+
+```bash
+bunx @queaxtra/zvelte create my-awesome-project
+```
+
+Create a project in the current directory:
+
+```bash
+bunx @queaxtra/zvelte create .
+```
+
+Create a project and install dependencies with Bun:
+
+```bash
+bunx @queaxtra/zvelte create my-awesome-project --install=bun
+```
+
+Create a project and choose package manager interactively:
+
+```bash
+bunx @queaxtra/zvelte create my-awesome-project --install
+```
+
+### --help
+
+Displays the help message with usage information.
+
+<ParamField path="-h, --help" type="flag">
+  Shows the complete usage message including commands, arguments, options, and examples.
+</ParamField>
+
+#### Syntax
+
+```bash
+bunx @queaxtra/zvelte --help
+bunx @queaxtra/zvelte -h
+```
+
+#### Output
+
+The help command displays:
+
+```
+Usage: bunx @queaxtra/zvelte <command> [options]
+
+Commands:
+  create <project-directory>  Creates a new SvelteKit project using a predefined template.
+
+Arguments:
+  <project-directory>  The directory for the new project.
+                       Use '.' to use the current directory.
+
+Options:
+  --install[=<pm>]     Installs dependencies using the specified package manager (bun, pnpm, npm, yarn).
+                       If no package manager is specified, you will be prompted to choose.
+  -h, --help           Displays this help message.
+
+Examples:
+  bunx @queaxtra/zvelte create my-awesome-project --install=bun
+```
+
+## Next Steps
+
+After creating your project:
+
+1. Navigate into your project directory:
+   ```bash
+   cd my-awesome-project
+   ```
+
+2. If you didn't use `--install`, install dependencies manually:
+   ```bash
+   bun install  # or npm install, yarn, pnpm
+   ```
+
+3. Start the development server:
+   ```bash
+   bun run dev  # or npm run dev, yarn dev, pnpm dev
+   ```

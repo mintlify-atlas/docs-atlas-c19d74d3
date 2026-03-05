@@ -1,0 +1,162 @@
+---
+title: Installation
+description: Install Zvelte and verify your setup to start creating SvelteKit projects.
+---
+
+Zvelte is designed to be used instantly without global installation. You can run it directly using `bunx`, which executes npm packages without installing them globally.
+
+## Prerequisites
+
+Before using Zvelte, ensure you have the following installed on your system:
+
+<Steps>
+  <Step title="Git">
+    Zvelte uses Git to clone the template repository. Verify Git is installed:
+    
+    ```bash
+    git --version
+    ```
+    
+    If Git is not installed, download it from [git-scm.com](https://git-scm.com/).
+  </Step>
+  
+  <Step title="Node.js or Bun">
+    You need a JavaScript runtime to execute Zvelte:
+    
+    - **Bun** (recommended): Fast all-in-one JavaScript runtime - [bun.sh](https://bun.sh/)
+    - **Node.js**: Version 16 or higher - [nodejs.org](https://nodejs.org/)
+    
+    Verify your installation:
+    
+    <CodeGroup>
+    ```bash Bun
+    bun --version
+    ```
+    
+    ```bash Node.js
+    node --version
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="Package Manager (Optional)">
+    If you want to install dependencies automatically, have one of these installed:
+    
+    - **bun** (recommended)
+    - **pnpm**
+    - **npm** (comes with Node.js)
+    - **yarn**
+    
+    Zvelte will detect available package managers and let you choose.
+  </Step>
+</Steps>
+
+## Using Zvelte
+
+<Warning>
+  No global installation is required. Zvelte is designed to run directly with `bunx`.
+</Warning>
+
+The recommended way to use Zvelte is with `bunx`, which executes the package directly from the npm registry:
+
+<CodeGroup>
+```bash Bun (Recommended)
+bunx @queaxtra/zvelte create my-project
+```
+
+```bash npx
+npx @queaxtra/zvelte create my-project
+```
+
+```bash pnpm
+pnpm dlx @queaxtra/zvelte create my-project
+```
+</CodeGroup>
+
+<Info>
+  Using `bunx` or `npx` ensures you always run the latest version of Zvelte without managing installations.
+</Info>
+
+## Verify Installation
+
+To verify that Zvelte can run correctly on your system, check the help message:
+
+```bash
+bunx @queaxtra/zvelte --help
+```
+
+You should see output similar to:
+
+```
+Usage: bunx @queaxtra/zvelte <command> [options]
+
+Commands:
+  create <project-directory>  Creates a new SvelteKit project using a predefined template.
+
+Arguments:
+  <project-directory>  The directory for the new project.
+                       Use '.' to use the current directory.
+
+Options:
+  --install[=<pm>]     Installs dependencies using the specified package manager (bun, pnpm, npm, yarn).
+                       If no package manager is specified, you will be prompted to choose.
+  -h, --help           Displays this help message.
+```
+
+## System Requirements
+
+<CardGroup cols={2}>
+  <Card title="Operating System" icon="desktop">
+    - macOS
+    - Linux
+    - Windows (with WSL recommended)
+  </Card>
+  
+  <Card title="Disk Space" icon="hard-drive">
+    - Minimal: ~10 MB for Zvelte
+    - Project: ~200-500 MB per project (with dependencies)
+  </Card>
+  
+  <Card title="Network" icon="wifi">
+    - Internet connection required to clone template repository
+    - Bandwidth: ~5-50 MB depending on package manager
+  </Card>
+  
+  <Card title="Permissions" icon="lock">
+    - Write access to target directory
+    - Git clone permissions (HTTPS)
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<Accordion title="Git is not installed">
+  If you see an error about Git not being found:
+  
+  1. Install Git from [git-scm.com](https://git-scm.com/)
+  2. Restart your terminal
+  3. Verify installation with `git --version`
+</Accordion>
+
+<Accordion title="Permission denied errors">
+  If you encounter permission errors:
+  
+  - Ensure you have write access to the target directory
+  - On Unix systems, avoid using `sudo` with npm/bunx
+  - Check your user permissions for the working directory
+</Accordion>
+
+<Accordion title="Network/clone failures">
+  If the repository clone fails:
+  
+  - Check your internet connection
+  - Verify GitHub is accessible from your network
+  - Try using a VPN if corporate firewall blocks GitHub
+  - Ensure Git is configured correctly
+</Accordion>
+
+## Next Steps
+
+<Card title="Create Your First Project" icon="rocket" href="/quickstart">
+  Now that Zvelte is ready, follow the quickstart guide to create your first SvelteKit project.
+</Card>

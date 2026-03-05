@@ -1,0 +1,92 @@
+---
+title: Introduction
+description: Learn about Zvelte, a CLI tool to quickly scaffold production-ready SvelteKit projects with modern tooling.
+---
+
+Zvelte is a command-line interface (CLI) tool designed to streamline the creation of new SvelteKit projects. It provides a rapid way to scaffold projects by cloning a pre-configured, production-ready template that integrates modern tools and best practices.
+
+## What is Zvelte?
+
+Zvelte eliminates the tedious setup process when starting a new SvelteKit project. Instead of manually configuring build tools, UI libraries, and internationalization from scratch, Zvelte gives you a fully configured project in seconds.
+
+<Info>
+  Zvelte is published as `@queaxtra/zvelte` on npm and can be used instantly with `bunx` without global installation.
+</Info>
+
+## Key Features
+
+Zvelte comes packed with features that make project scaffolding fast and reliable:
+
+<CardGroup cols={2}>
+  <Card title="Zero Installation" icon="bolt">
+    Use `bunx` to run Zvelte directly without global installation. No clutter in your system.
+  </Card>
+  
+  <Card title="Production-Ready Template" icon="rocket">
+    Pre-configured with Shadcn UI, Tailwind CSS, and i18n support for immediate development.
+  </Card>
+  
+  <Card title="Smart Package Management" icon="box">
+    Choose your preferred package manager (bun, pnpm, npm, yarn) or let Zvelte detect available options.
+  </Card>
+  
+  <Card title="Automatic Configuration" icon="gear">
+    Updates `package.json` automatically with your project name, version, and description.
+  </Card>
+</CardGroup>
+
+## What's Included in the Template?
+
+When you create a project with Zvelte, you get a complete SvelteKit application with:
+
+- **Shadcn UI** - Modern, accessible component library built on Radix UI
+- **Tailwind CSS** - Utility-first CSS framework for rapid styling
+- **i18n Support** - Built-in internationalization for multi-language applications
+- **Clean Git History** - The `.git` directory is removed, giving you a fresh start
+- **Optimized Configuration** - Pre-configured build tools and development environment
+
+## Why Use Zvelte?
+
+<Steps>
+  <Step title="Save Time">
+    Skip hours of manual configuration and start building features immediately.
+  </Step>
+  
+  <Step title="Best Practices Built-In">
+    Leverage a template that follows SvelteKit and modern web development best practices.
+  </Step>
+  
+  <Step title="Consistent Setup">
+    Ensure every project starts with the same solid foundation across your team.
+  </Step>
+  
+  <Step title="Lightweight & Fast">
+    Minimal dependencies mean fast installation and no bloat in your development workflow.
+  </Step>
+</Steps>
+
+## Quick Example
+
+Get started with Zvelte in one command:
+
+```bash
+bunx @queaxtra/zvelte create my-awesome-project --install=bun
+```
+
+This single command clones the template, sets up your project, and installs all dependencies.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Learn how to install and verify Zvelte on your system.
+  </Card>
+  
+  <Card title="Quickstart" icon="play" href="/quickstart">
+    Create your first SvelteKit project with Zvelte in minutes.
+  </Card>
+</CardGroup>
+
+<Note>
+  Zvelte is open source and licensed under MIT. Contributions are welcome on [GitHub](https://github.com/Queaxtra/zvelte).
+</Note>

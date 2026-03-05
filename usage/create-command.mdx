@@ -1,0 +1,147 @@
+---
+title: "Create Command"
+description: "Learn how to use the create command to initialize new SvelteKit projects with the Zvelte CLI"
+---
+
+## Overview
+
+The `create` command is the primary command in Zvelte CLI. It clones the SvelteKit Shadcn template repository and sets up a new project with your specified configuration.
+
+## Basic Syntax
+
+```bash
+bunx @queaxtra/zvelte create <project-directory> [options]
+```
+
+### Arguments
+
+<ParamField path="project-directory" type="string" required>
+  The name or path of the directory where your new project will be created. Use `.` to initialize in the current directory.
+</ParamField>
+
+## Command Behavior
+
+When you run the create command, Zvelte performs the following steps:
+
+<Steps>
+  <Step title="Validate Directory">
+    Validates the target directory path and checks for path traversal attacks to ensure security.
+  </Step>
+  
+  <Step title="Clone Template">
+    Clones the [sveltekit-shadcn-template](https://github.com/Queaxtra/sveltekit-shadcn-template) repository into your specified directory.
+  </Step>
+  
+  <Step title="Remove Git History">
+    Removes the `.git` directory from the cloned template so you can initialize your own repository.
+  </Step>
+  
+  <Step title="Update package.json">
+    Automatically updates the `package.json` file with:
+    - `name`: Set to your project directory name
+    - `description`: Cleared to an empty string
+    - `version`: Reset to "0.0.1"
+  </Step>
+  
+  <Step title="Install Dependencies (Optional)">
+    If you used the `--install` flag, installs project dependencies with your chosen package manager.
+  </Step>
+</Steps>
+
+## Usage Examples
+
+<CodeGroup>
+
+```bash Basic Usage
+bunx @queaxtra/zvelte create my-svelte-app
+```
+
+```bash With Auto-Install
+bunx @queaxtra/zvelte create my-svelte-app --install=bun
+```
+
+```bash Current Directory
+bunx @queaxtra/zvelte create . --install
+```
+
+```bash Nested Directory
+bunx @queaxtra/zvelte create projects/new-app
+```
+
+</CodeGroup>
+
+## Expected Output
+
+When you run the create command successfully, you'll see output similar to this:
+
+```bash
+Creating new project in /path/to/my-svelte-app...
+Cloning into 'my-svelte-app'...
+Removed .git directory.
+Project created successfully!
+```
+
+If you included the `--install` flag:
+
+```bash
+Creating new project in /path/to/my-svelte-app...
+Cloning into 'my-svelte-app'...
+Removed .git directory.
+Project created successfully!
+Installing dependencies with bun...
+
+Dependencies installed successfully!
+```
+
+## Directory Validation
+
+<Note>
+  Zvelte includes built-in security checks to prevent path traversal attacks. The target directory path is validated and normalized before any operations are performed.
+</Note>
+
+The create command will fail in these scenarios:
+
+- **Non-empty directory**: If you specify a directory name (not `.`) and that directory already exists and is not empty, the command will abort with an error:
+  ```
+  Error: Directory 'my-app' already exists and is not empty.
+  ```
+
+- **Invalid path**: If the directory path contains invalid characters or attempts path traversal:
+  ```
+  Error: Path traversal detected in project directory.
+  ```
+
+<Tip>
+  Use the current directory syntax (`.`) if you want to merge the template into an existing non-empty directory. See [Current Directory](/usage/current-directory) for details.
+</Tip>
+
+## Template Contents
+
+The created project includes:
+
+- **SvelteKit**: Modern web framework for building fast, efficient applications
+- **Shadcn UI**: High-quality, accessible UI components
+- **Tailwind CSS**: Utility-first CSS framework
+- **i18n Support**: Built-in internationalization capabilities
+- **Pre-configured tooling**: ESLint, Prettier, and TypeScript ready to go
+
+## Next Steps
+
+After creating your project:
+
+<CardGroup cols={2}>
+  <Card title="Install Dependencies" icon="box" href="/usage/package-managers">
+    Learn about package manager options and auto-installation
+  </Card>
+  <Card title="Start Developing" icon="code" href="/quickstart">
+    Navigate to your project and start the dev server
+  </Card>
+</CardGroup>
+
+## Getting Help
+
+To view the help message at any time:
+
+```bash
+bunx @queaxtra/zvelte --help
+```
