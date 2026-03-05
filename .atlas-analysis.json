@@ -1,0 +1,64 @@
+{
+  "projectType": "cli-tool",
+  "projectName": "Zvelte",
+  "projectDescription": "A CLI tool to quickly scaffold SvelteKit projects with Shadcn UI, Tailwind CSS, and i18n support.",
+  "theme": "palm",
+  "primaryColor": "#cb0404",
+  "lightColor": "#f3d2d2",
+  "darkColor": "#e37b84",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "introduction",
+          "installation",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Usage",
+        "pages": [
+          "usage/create-command",
+          "usage/package-managers",
+          "usage/current-directory"
+        ]
+      },
+      {
+        "group": "Configuration",
+        "pages": [
+          "configuration/package-json",
+          "configuration/template"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": [
+          "reference/commands",
+          "reference/options",
+          "reference/troubleshooting"
+        ]
+      },
+      {
+        "group": "Community",
+        "pages": [
+          "community/contributing",
+          "community/license"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "One-command project scaffolding",
+    "Pre-configured SvelteKit template with Shadcn UI",
+    "Automatic package.json initialization",
+    "Multiple package manager support (bun, npm, pnpm, yarn)",
+    "Current directory merge support",
+    "Interactive package manager selection"
+  ],
+  "publicApiSurface": [
+    "zvelte create <project-directory>",
+    "zvelte create --install[=<pm>]",
+    "zvelte --help"
+  ]
+}
